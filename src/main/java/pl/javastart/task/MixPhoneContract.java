@@ -1,6 +1,6 @@
 package pl.javastart.task;
 
-class MixPhoneContract implements PhoneContract {
+class MixPhoneContract extends PhoneContract {
     private int remainingSms;
     private int remainingMms;
     private int remainingMinutes;
@@ -20,46 +20,60 @@ class MixPhoneContract implements PhoneContract {
     }
 
     @Override
-    public boolean canSendSms() {
-        return remainingSms > 0 || accountBalance >= smsCost;
-    }
-
-    @Override
-    public boolean canSendMms() {
-        return remainingMms > 0 || accountBalance >= mmsCost;
-    }
-
-    @Override
-    public boolean canMakeCall(int seconds) {
-        return remainingMinutes > 0 || accountBalance >= (seconds * (callCostPerMinute / 60));
-    }
-
-    @Override
-    public void applySmsCharge() {
+    public void sendSms() {
         if (remainingSms > 0) {
             remainingSms--;
-        } else {
+            sentSmsCount++;
+        } else if (accountBalance >= smsCost) {
             accountBalance -= smsCost;
+            sentSmsCount++;
+        } else {
+            System.out.println("Nie udało się wysłać SMSa");
         }
     }
 
     @Override
-    public void applyMmsCharge() {
+    public void sendMms() {
         if (remainingMms > 0) {
             remainingMms--;
-        } else {
+            sentMmsCount++;
+        } else if (accountBalance >= mmsCost) {
             accountBalance -= mmsCost;
+            sentMmsCount++;
+        } else {
+            System.out.println("Nie udało się wysłać SMSa");
         }
     }
 
     @Override
-    public void applyCallCharge(int seconds) {
-        if (remainingMinutes > 0) {
-            remainingMinutes--;
+    public void makeCall(int seconds) {
+        //Sprawdzam czy remainingMinutes sa w stanie obsluzyc polaczenie, jesli tak to odejmuje sekundy od remainingMinutes
+        if ((remainingMinutes / 60) >= seconds) {
+            remainingMinutes = (remainingMinutes / 60) - seconds;
+            usedCallSeconds += seconds;
+            System.out.println("Rozmowa trwała " + seconds + " sekund");
+            //Sprawdzam czy w przypadku jak remaining minutes sa mniejsze niz wartosc seconds to czy w takiej sytuacji
+            // accountState pozwala mi obsluzyc polaczenie
+        } else if ((remainingMinutes / 60) < seconds && accountBalance >=
+                (seconds - ((double) remainingMinutes / 60)) * (callCostPerMinute / 60)) {
+            remainingMinutes = 0;
+            accountBalance -= (seconds - ((double) remainingMinutes / 60) ) * (callCostPerMinute / 60);
+            usedCallSeconds += seconds;
+            System.out.println("Rozmowa trwała " + seconds + " sekund");
+            //w przypadku gdy remainingMinutes i accountState nie pozwalaja na pelna obsluge odejmuje wartosci
+            // i pozwalam na polaczenie do czasu wyczerpania srodkow
+        } else if (((remainingMinutes / 60) < seconds && accountBalance <
+                (seconds - ((double) remainingMinutes / 60)) * (callCostPerMinute / 60))) {
+            double callTime = accountBalance * (callCostPerMinute / 60)  + (remainingMinutes / 60);
+            remainingMinutes = 0;
+            accountBalance = 0;
+            usedCallSeconds += callTime;
+            System.out.println("Rozmowa trwała " + callTime + " sekund");
+            //Ostatnia opcja - calkowity brak srodkow
         } else {
-            double callCost = seconds * (callCostPerMinute / 60);
-            accountBalance -= callCost;
+            System.out.println("Nie udało się wykonać rozmowy - brak środków lub czasu rozmowy do wykorzystania");
         }
+
     }
 
     @Override

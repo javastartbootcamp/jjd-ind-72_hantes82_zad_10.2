@@ -1,6 +1,6 @@
 package pl.javastart.task;
 
-class AbonamentPhoneContract implements PhoneContract {
+class AbonamentPhoneContract extends PhoneContract {
     private double monthlyFee;
 
     public AbonamentPhoneContract(double monthlyFee) {
@@ -8,32 +8,23 @@ class AbonamentPhoneContract implements PhoneContract {
     }
 
     @Override
-    public boolean canSendSms() {
-        return true;
-    }
-
-    @Override
-    public boolean canSendMms() {
-        return true;
-    }
-
-    @Override
-    public boolean canMakeCall(int seconds) {
-        return true;
-    }
-
-    @Override
-    public void applySmsCharge() {
+    public void sendSms() {
+        sentSmsCount++;
+        System.out.println("SMS wysłany");
         // No charges for SMS on abonament contract
     }
 
     @Override
-    public void applyMmsCharge() {
+    public void sendMms() {
+        sentMmsCount++;
+        System.out.println("MMS wysłany");
         // No charges for MMS on abonament contract
     }
 
     @Override
-    public void applyCallCharge(int seconds) {
+    public void makeCall(int seconds) {
+        usedCallSeconds += seconds;
+        System.out.println("Rozmowa trwała " + seconds + " sekund");
         // No charges for calls on abonament contract
     }
 

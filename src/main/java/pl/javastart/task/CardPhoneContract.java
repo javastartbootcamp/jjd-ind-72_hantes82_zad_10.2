@@ -1,6 +1,6 @@
 package pl.javastart.task;
 
-class CardPhoneContract implements PhoneContract {
+class CardPhoneContract extends PhoneContract {
     private double accountBalance;
     private double smsCost;
     private double mmsCost;
@@ -14,35 +14,43 @@ class CardPhoneContract implements PhoneContract {
     }
 
     @Override
-    public boolean canSendSms() {
-        return accountBalance >= smsCost;
+    public void sendSms() {
+        if (accountBalance >= smsCost) {
+            accountBalance -= smsCost;
+            sentSmsCount++;
+            System.out.println("SMS wysłany");
+        } else {
+            System.out.println("Nie udało się wysłać SMSa");
+        }
     }
 
     @Override
-    public boolean canSendMms() {
-        return accountBalance >= mmsCost;
+    public void sendMms() {
+        if (accountBalance >= mmsCost) {
+            accountBalance -= mmsCost;
+            sentMmsCount++;
+            System.out.println("MMS wysłany");
+        } else {
+            System.out.println("Nie udało się wysłać MMSa");
+        }
     }
 
     @Override
-    public boolean canMakeCall(int seconds) {
+    public void makeCall(int seconds) {
         double callCost = seconds * (callCostPerMinute / 60);
-        return accountBalance >= callCost;
-    }
-
-    @Override
-    public void applySmsCharge() {
-        accountBalance -= smsCost;
-    }
-
-    @Override
-    public void applyMmsCharge() {
-        accountBalance -= mmsCost;
-    }
-
-    @Override
-    public void applyCallCharge(int seconds) {
-        double callCost = seconds * (callCostPerMinute / 60);
-        accountBalance -= callCost;
+        if (accountBalance == 0) {
+            System.out.println("Nie udało się wykonać rozmowy - brak środków lub czasu rozmowy do wykorzystania");
+        }
+        if (accountBalance >= callCost) {
+            accountBalance -= callCost;
+            usedCallSeconds += seconds;
+            System.out.println("Rozmowa trwała " + seconds + " sekund");
+        } else {
+            double callTime = accountBalance / (callCostPerMinute / 60);
+            System.out.println("Rozmowa trwała " + callTime + " sekund");
+            usedCallSeconds += callTime;
+            accountBalance = 0;
+        }
     }
 
     @Override

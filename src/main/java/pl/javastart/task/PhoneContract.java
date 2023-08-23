@@ -1,19 +1,19 @@
 package pl.javastart.task;
 
-interface PhoneContract {
-    boolean canSendSms();
+abstract class PhoneContract {
 
-    boolean canSendMms();
+    protected int sentSmsCount = 0;
+    protected int sentMmsCount = 0;
+    protected int usedCallSeconds = 0;
 
-    boolean canMakeCall(int seconds);
+    abstract void sendSms();
 
-    void applySmsCharge();
+    abstract void sendMms();
 
-    void applyMmsCharge();
+    abstract void makeCall(int seconds);
 
-    void applyCallCharge(int seconds);
+    abstract void applyMonthlyFee();
 
-    void applyMonthlyFee();
+    abstract String getContractInfo();
 
-    String getContractInfo();
 }
