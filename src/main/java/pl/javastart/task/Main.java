@@ -1,5 +1,7 @@
 package pl.javastart.task;
 
+import pl.javastart.task.contract.CardPhoneContract;
+
 public class Main {
 
     public static void main(String[] args) {

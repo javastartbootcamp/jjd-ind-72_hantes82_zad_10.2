@@ -1,5 +1,7 @@
 package pl.javastart.task;
 
+import pl.javastart.task.contract.PhoneContract;
+
 class Phone {
     private PhoneContract contract;
 
@@ -8,22 +10,33 @@ class Phone {
     }
 
     public void sendSms() {
-        contract.sendSms();
+        if (contract.sendSms()) {
+            System.out.println("SMS wysłany");
+        } else {
+            System.out.println("SMS wysłany");
+        }
     }
 
     public void sendMms() {
-        contract.sendMms();
+        if (contract.sendMms()) {
+            System.out.println("MMS wysłany");
+        } else {
+            System.out.println("MMS wysłany");
+        }
     }
 
     public void call(int seconds) {
-        contract.makeCall(seconds);
+        if (contract.makeCall(seconds) == seconds) {
+            System.out.println("Rozmowa trwała " + seconds + " sekund");
+        } else if (contract.makeCall(seconds) == 0) {
+            System.out.println("Nie udało się wykonać rozmowy - brak środków lub czasu rozmowy do wykorzystania");
+        } else {
+            System.out.println("Rozmowa trwała " + contract.makeCall(seconds) + " sekund");
+        }
     }
 
     public void printAccountState() {
-        System.out.println("=== STAN KONTA ===");
-        System.out.println("Wysłanych SMSów: " + contract.sentSmsCount);
-        System.out.println("Wysłanych MMSów: " + contract.sentMmsCount);
-        System.out.println("Liczba sekund rozmowy: " + contract.usedCallSeconds);
+        contract.getUsage();
         System.out.println(contract.getContractInfo());
         System.out.println();
     }

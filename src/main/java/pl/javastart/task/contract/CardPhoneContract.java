@@ -1,6 +1,6 @@
-package pl.javastart.task;
+package pl.javastart.task.contract;
 
-class CardPhoneContract extends PhoneContract {
+public class CardPhoneContract extends PhoneContract {
     private double accountBalance;
     private double smsCost;
     private double mmsCost;
@@ -14,42 +14,42 @@ class CardPhoneContract extends PhoneContract {
     }
 
     @Override
-    public void sendSms() {
+    public boolean sendSms() {
         if (accountBalance >= smsCost) {
             accountBalance -= smsCost;
             sentSmsCount++;
-            System.out.println("SMS wysłany");
+            return true;
         } else {
-            System.out.println("Nie udało się wysłać SMSa");
+            return false;
         }
     }
 
     @Override
-    public void sendMms() {
+    public boolean sendMms() {
         if (accountBalance >= mmsCost) {
             accountBalance -= mmsCost;
             sentMmsCount++;
-            System.out.println("MMS wysłany");
+            return true;
         } else {
-            System.out.println("Nie udało się wysłać MMSa");
+            return false;
         }
     }
 
     @Override
-    public void makeCall(int seconds) {
+    public int makeCall(int seconds) {
         double callCost = seconds * (callCostPerMinute / 60);
         if (accountBalance == 0) {
-            System.out.println("Nie udało się wykonać rozmowy - brak środków lub czasu rozmowy do wykorzystania");
+            return 0;
         }
         if (accountBalance >= callCost) {
             accountBalance -= callCost;
             usedCallSeconds += seconds;
-            System.out.println("Rozmowa trwała " + seconds + " sekund");
+            return seconds;
         } else {
             double callTime = accountBalance / (callCostPerMinute / 60);
-            System.out.println("Rozmowa trwała " + callTime + " sekund");
             usedCallSeconds += callTime;
             accountBalance = 0;
+            return (int) callTime;
         }
     }
 
