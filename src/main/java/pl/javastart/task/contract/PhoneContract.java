@@ -12,7 +12,6 @@ public abstract class PhoneContract {
 
     public abstract int makeCall(int seconds);
 
-
     public abstract String getContractInfo();
 
     public String  getUsage() {

@@ -5,7 +5,8 @@ public class MixPhoneContract extends CardPhoneContract {
     private int remainingMms;
     private int remainingSeconds;
 
-    public MixPhoneContract(double accountBalance, double smsCost, double mmsCost, double callCostPerMinute, int remainingSms, int remainingMms, int remainingSeconds) {
+    public MixPhoneContract(double accountBalance, double smsCost, double mmsCost, double callCostPerMinute,
+                            int remainingSms, int remainingMms, int remainingSeconds) {
         super(accountBalance, smsCost, mmsCost, callCostPerMinute);
         this.remainingSms = remainingSms;
         this.remainingMms = remainingMms;
@@ -34,6 +35,8 @@ public class MixPhoneContract extends CardPhoneContract {
             return super.sendMms();
         }
     }
+//Przy testowaniu wyszło mi że brakuje zerowania remaining seconds w tej wersji ktora zrobiles
+//(kiedy zaplanowana ilosc sekund jest wieksza niz remainingSeconds)
 
     @Override
     public int makeCall(int seconds) {
