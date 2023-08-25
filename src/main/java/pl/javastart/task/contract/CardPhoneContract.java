@@ -1,10 +1,10 @@
 package pl.javastart.task.contract;
 
 public class CardPhoneContract extends PhoneContract {
-    private double accountBalance;
-    private double smsCost;
-    private double mmsCost;
-    private double callCostPerMinute;
+    protected double accountBalance;
+    protected double smsCost;
+    protected double mmsCost;
+    protected double callCostPerMinute;
 
     public CardPhoneContract(double accountBalance, double smsCost, double mmsCost, double callCostPerMinute) {
         this.accountBalance = accountBalance;
@@ -51,11 +51,6 @@ public class CardPhoneContract extends PhoneContract {
             accountBalance = 0;
             return (int) callTime;
         }
-    }
-
-    @Override
-    public void applyMonthlyFee() {
-        // There is no monthly fee for card contracts
     }
 
     @Override

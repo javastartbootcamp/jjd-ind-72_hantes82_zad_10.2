@@ -7,6 +7,10 @@ class AbonamentPhoneContract extends PhoneContract {
         this.monthlyFee = monthlyFee;
     }
 
+    public void applyMonthlyFee() {
+        // Once per month, depends on option we have chosen :-)
+    }
+
     @Override
     public boolean sendSms() {
         sentSmsCount++;
@@ -25,11 +29,6 @@ class AbonamentPhoneContract extends PhoneContract {
     public int makeCall(int seconds) {
         usedCallSeconds += seconds;
         return seconds;
-    }
-
-    @Override
-    public void applyMonthlyFee() {
-        // Once per month, depends on option we have chosen :-)
     }
 
     @Override
